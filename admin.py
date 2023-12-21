@@ -73,22 +73,13 @@ class LavoraConNoiAdmin(admin.ModelAdmin):
 
 @admin.register(Evento)
 class EventiAdmin(admin.ModelAdmin):
-    # form_fields_overrides = { models.DateField: { 'widget' : PastCustomDatePickerWidget } }
-    # class DateInput(forms.DateInput):
-    #     input_type = 'date'
 
     list_display = ['__str__','nome_contatto','cognome_contatto', 'email_contatto', 'citta_contatto','provincia_contatto','cellulare_contatto','tipo_evento', 'luogo_evento','citta_evento',
-                    'provincia_evento','indirizzo_evento','dataora_evento', 'approvato','img_preview','data_inserimento','data_modifica']
+                    'provincia_evento','indirizzo_evento','data_evento', 'approvato','img_preview','data_inserimento','data_modifica']
     search_fields = ['nome_contatto', 'cognome_contatto', 'email_contatto','citta_contatto','provincia_contatto',
-                     'cellulare_contatto','tipo_evento', 'luogo_evento','citta_evento','provincia_evento','indirizzo_evento','dataora_evento','data_modifica']
-    list_filter = ['nome_contatto', 'cognome_contatto', 'email_contatto','citta_contatto','provincia_contatto','cellulare_contatto','tipo_evento', 'luogo_evento','citta_evento','provincia_evento','indirizzo_evento','dataora_evento','approvato','data_modifica']
+                     'cellulare_contatto','tipo_evento', 'luogo_evento','citta_evento','provincia_evento','indirizzo_evento','data_evento','data_modifica']
+    list_filter = ['nome_contatto', 'cognome_contatto', 'email_contatto','citta_contatto','provincia_contatto','cellulare_contatto','tipo_evento', 'luogo_evento','citta_evento','provincia_evento','indirizzo_evento','data_evento','approvato','data_modifica']
     list_display_links = ['__str__']
-    readonly_fields = ['img_preview','dataora_evento']
+    readonly_fields = ['img_preview','data_evento']
     list_editable = ['nome_contatto','cognome_contatto', 'email_contatto','citta_contatto','provincia_contatto','cellulare_contatto','tipo_evento', 'luogo_evento','citta_evento','provincia_evento','indirizzo_evento','approvato']
-
-    # def clean(self):
-    #     if self.dataora_evento:
-    #             arr_data = self.dataora_evento.split("/")
-    #             self.dataora_evento = f"{arr_data[2]}/{arr_data[1]}/{arr_data[0]}"
-    #form_fields_overrides = { models.DateField: { 'widget' : DateInput() } }
     

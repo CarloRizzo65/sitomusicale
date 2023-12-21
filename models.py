@@ -48,8 +48,8 @@ class Componente(models.Model):
 
     def __str__(self):
         nome_completo = f"{self.nome} {self.cognome}"
-        return f"{self.nickname if self.nickname is not None else nome_completo}"
     
+        return f"{self.ruolo} - {self.nickname if self.nickname is not None else nome_completo}"
     class Meta:
         verbose_name_plural = 'componenti'
 
@@ -61,38 +61,34 @@ class Componente(models.Model):
 class Evento(models.Model): 
     nome_contatto = models.CharField(max_length=150, null=True, blank=True)
     cognome_contatto = models.CharField(max_length=150, null=True, blank=True)
-    email_contatto = models.EmailField(max_length = 254)
+    email_contatto = models.EmailField(max_length = 254, null=True, blank=True)
     citta_contatto = models.CharField("Città di residenza", max_length=200)
-    provincia_contatto = models.CharField("Sigla provincia di residenza", max_length=2, blank=True, null=True, validators=[RegexValidator(
+    provincia_contatto = models.CharField("Sigla provincia di residenza", max_length=2, validators=[RegexValidator(
         regex=r'^[A-Za-z]{2}$',
         message='Inserisci la sigla di una provincia (2 lettere)',
-    )])
-    cellulare_contatto = models.CharField("Cellulare contatto", max_length=15, blank=True, null=True, validators=[RegexValidator(
-        regex=r'^\d{,15}$',
-        message='Inserisci un numero di cellulare (solo cifre, senza spazi)',
-    )])
+    )], null=True, blank=True)
+    cellulare_contatto = models.CharField("Cellulare contatto", max_length=15, null=True, blank=True)
     tipo_evento = models.CharField("Tipo di evento (matrimonio, compleanno...)",max_length=150, null=True, blank=True)
     luogo_evento = models.CharField("Luogo/nome della sala",max_length=255, null=True, blank=True)
     citta_evento = models.CharField("Città dell'evento", max_length=200)
-    provincia_evento = models.CharField("Sigla provincia dell'evento", max_length=2, blank=True, null=True, validators=[RegexValidator(
+    provincia_evento = models.CharField("Sigla provincia dell'evento", max_length=2, validators=[RegexValidator(
         regex=r'^[A-Za-z]{2}$',
         message='Inserisci la sigla di una provincia (2 lettere)',
-    )])
+    )], null=True, blank=True)
     indirizzo_evento = models.CharField("Via/Piazza e numero civico",max_length=255, null=True, blank=True)
-    dataora_evento = models.DateTimeField(default=timezone.now)
+    data_evento = models.DateField(default=date.today)
     approvato = models.BooleanField(default=False)
     componenti = models.ManyToManyField(Componente)
     data_inserimento = models.DateTimeField(auto_now_add=True, blank=True,null=True)
     data_modifica = models.DateTimeField(auto_now=True, blank=True,null=True)
     img = models.ImageField(upload_to='img_eventi/%Y/%m/%d/', default='no-image.png', blank=True, null=True)
-    descrizione = RichTextField(null=True, blank=True)
     img_resized = ImageSpecField(source='img',
                                       processors=[ResizeToFill(360,360)],
                                       format='PNG',
                                       options={'quality': 60})
 
     def __str__(self):
-        return f"{self.tipo_evento} - {self.dataora_evento.strftime('%A %d %B %Y alle %H:%M')}"
+        return f"{self.tipo_evento} - {self.data_evento.strftime('%A %d %B %Y')}"
     
     class Meta:
         verbose_name_plural = 'Eventi'
@@ -106,11 +102,6 @@ class Evento(models.Model):
             self.provincia_contatto = self.provincia_contatto.upper()
         if self.provincia_evento:
             self.provincia_evento = self.provincia_evento.upper()
-        if self.dataora_evento:
-            self.dataora_evento = None
-        # if self.dataora_evento:
-        #     arr_data = self.dataora_evento.split("/")
-        #     self.dataora_evento = f"{arr_data[2]}/{arr_data[1]}/{arr_data[0]}"
         super(Evento, self).save(*args, **kwargs)
         return None
     
