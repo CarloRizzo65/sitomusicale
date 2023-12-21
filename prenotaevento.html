@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Prenota Evento{% endblock title %}
+{% block style %}
+<style>
+section {
+    margin-top:35px;
+    margin-bottom:35px;
+}
+.input_elem, #id_captcha_1 {
+    height: 50px;
+    font-size: 13px;
+    color: #666666;
+    padding-left: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #e1e1e1;
+}
+#lbl_captcha {
+    text-align:right;
+    height:50px;
+    line-height: 50px;
+}
+</style>   
+{% endblock style %}
+{% block content %}
+    <!-- Contact Section Begin -->
+    <section class="contact spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="contact__address">
+                        <div class="section-title">
+                            <h2>Contatti</h2>
+                        </div>
+                        <p>Puoi chiamarci al telefono o scriverci per e-mail: ti risponderemo al più presto!</p>
+                        <ul>
+                            <li>
+                                <i class="fa fa-phone"></i>
+                                <h5>Cellulare</h5>
+                                <span>1-677-124-44227</span>
+                            </li>
+                            <li>
+                                <i class="fa fa-envelope"></i>
+                                <h5>Email</h5>
+                                <p>DJ.Music@gmail.com</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="contact__form">
+                        <div class="section-title">
+                            <h2>Prenota il tuo evento</h2>
+                        </div>
+                        <p>Riempi i campi obbligatori* e verrai presto contattato</p>
+                        {% if messaggio %}
+                        <div class="valid-feedback">
+                                {{ messaggio }}
+                        </div>
+                        {% endif %}
+                        <form method="post" action=/prenotaevento/>
+                            {% csrf_token %}
+                            <span style='color:red;'>{{ form.non_field_errors }}</span>
+                            <fieldset>
+                                <legend>Dati Personali</legend>
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        <!--<input class="form-control input_elem" type="text" placeholder="Nome">-->
+                                        {{ prenota_form.nome_contatto }}
+                                        {% for error in user_form.username.errors  %}
+                                        <br><span style='color:red;'>{{error}}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!--<input class="form-control input_elem" type="text" placeholder="Cognome">-->
+                                        {{ prenota_form.cognome_contatto }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!--<input class="form-control input_elem" type="email" placeholder="Email">-->
+                                        {{ prenota_form.email_contatto }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!--<input class="form-control input_elem" type="text" placeholder="Città">-->
+                                        {{ prenota_form.citta_contatto }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!--<input class="form-control input_elem" type="text" placeholder="Sigla della provincia">-->
+                                        {{ prenota_form.provincia_contatto }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!--<input class="form-control input_elem" type="text" placeholder="Cellulare (solo cifre, senza spazi)">-->
+                                        {{ prenota_form.cellulare_contatto }}
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Dati per l'Evento</legend>
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <!--<input type="text" class="form-control input_elem" id="tipo_evento" placeholder="Tipo di evento (matrimonio, compleanno,...)">-->
+                                        {{ prenota_form.tipo_evento }}
+                                    </div>
+                                    <div class="col-md-12">
+                                        <!--<input type="text" class="form-control input_elem" id="nome_luogo" placeholder="Nome della sala o del luogo privato">-->
+                                        {{ prenota_form.luogo_evento }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!--<input class="form-control input_elem" id="citta_evento" type="text" placeholder="Città">-->
+                                        {{ prenota_form.citta_evento }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <!--<input class="form-control input_elem" id="provincia_evento" type="text" placeholder="Sigla della provincia">-->
+                                        {{ prenota_form.provincia_evento }}
+                                    </div>
+                                    <div class="col-md-12">
+                                        <!--<input class="form-control input_elem" id="indirizzo_evento" type="text" placeholder="Via/Piazza e numero civico">-->
+                                        {{ prenota_form.indirizzo_evento }}
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <!--<select id="inputState" id="componenti_evento" class="form-control input_elem">
+                                            <option selected>Partecipanti della band all'evento</option>
+                                            <option>...</option>
+                                          </select>-->
+                                          <label for="componenti">Partecipanti della band all'evento*</label>
+                                          {{ prenota_form.componenti }}
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <!--<input class="form-control input_elem" id="data_evento" type="date">-->
+                                        <label for="data_evento">Data dell'evento*</label>
+                                        {{ prenota_form.data_evento }}
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class="form-row">
+                                <div id="lbl_captcha" class="col-md-6">
+                                    <label  for="captcha">Scrivi i caratteri che vedi*</label>
+                                </div>
+                                <div class="col-md-6">
+                                    {{ prenota_form.captcha }}
+                                </div>
+                            </div>
+                            <button type="submit" class="site-btn">PRENOTA L'EVENTO</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Section End -->
+    {% endblock content %}
