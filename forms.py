@@ -49,4 +49,4 @@ class CommentiForm(forms.ModelForm):
     captcha = CaptchaField()
     class Meta:
         model = Commenti
-        fields = ['nome','email','commento','captcha']   
+        fields = ['nome','email','commento']   
