@@ -48,8 +48,8 @@ class Componente(models.Model):
 
     def __str__(self):
         nome_completo = f"{self.nome} {self.cognome}"
-    
         return f"{self.ruolo} - {self.nickname if self.nickname is not None else nome_completo}"
+    
     class Meta:
         verbose_name_plural = 'componenti'
 
@@ -130,7 +130,7 @@ class FotoPage(models.Model):
     data_modifica = models.DateTimeField(auto_now=True)
     img = models.ImageField(upload_to='img_foto_page/%Y/%m/%d/', default='no-image.png')
     img_resized = ImageSpecField(source='img',
-                                      processors=[ResizeToFill(250,250)],
+                                      processors=[ResizeToFill(360,240)],
                                       format='PNG',
                                       options={'quality': 60})
 
@@ -187,10 +187,11 @@ class DatiGruppo(models.Model):
     
 class Commenti(models.Model):
     nome = models.CharField(max_length=150, null=True, blank=True)
-    evento = models.CharField(max_length=255, null=True, blank=True)
+    commento = models.CharField(max_length=255, null=True, blank=True)
     data_inserimento = models.DateTimeField(auto_now_add=True)
     data_modifica = models.DateTimeField(auto_now=True)
-    testo = models.TextField(null=True, blank=True)
+    #testo = models.TextField(null=True, blank=True)
+    email = models.EmailField(max_length = 254, null=True, blank=True)
 
     def __str__(self):
         return f"{self.nome} {self.data_inserimento.strftime('%A %d %B %Y alle %H:%M')}"

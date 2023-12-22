@@ -643,9 +643,6 @@
     </footer>
 
     <!-- Footer Section End -->
-{% block script %}
-{% endblock script %}
-
     <!-- Js Plugins -->
     <script src="{% static "js/jquery-3.3.1.min.js" %}"></script>
     <script src="{% static "js/bootstrap.min.js" %}"></script>
@@ -660,6 +657,7 @@
     <!-- Music Plugin -->
     <script src="{% static "js/jquery.jplayer.min.js" %}"></script>
     <script src="{% static "js/jplayerInit.js" %}"></script>
-    
+    {% block script %}
+    {% endblock script %}
 </body>
 </html>

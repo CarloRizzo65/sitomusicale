@@ -1,5 +1,5 @@
 from django import forms
-from .models import Evento, Componente
+from .models import Evento, Commenti
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from datetime import datetime
@@ -31,7 +31,7 @@ class PrenotaEventoForm(forms.ModelForm):
         self.fields['provincia_evento'].widget.attrs.update({'class':'form-control input_elem', 'pattern':"^[a-zA-Z]{2}$", 'required':True,'autocomplete': 'provincia_evento', 'placeholder':'Sigla della provincia*'})
         self.fields['indirizzo_evento'].widget.attrs.update({'class':'form-control input_elem', 'required':False,'autocomplete': 'indirizzo_evento', 'placeholder':'Via/Piazza e numero civico'})
         self.fields['data_evento'].widget.attrs.update({'class':'form-control input_elem', 'required':True, 'placeholder':'gg/mm/aaaa*'})
-        self.fields['componenti'].widget.attrs.update({'size':2,'class':'form-control input_elem', 'required':True, 'placeholder':'Partecipanti della band all\'evento*'})
+        self.fields['componenti'].widget.attrs.update({'size':3,'class':'form-control input_elem', 'required':True, 'placeholder':'Partecipanti della band all\'evento*'})
 
 
 
@@ -43,3 +43,10 @@ class PrenotaEventoForm(forms.ModelForm):
         widgets = {
             'data_evento': DateInput(),
         }
+
+
+class CommentiForm(forms.ModelForm):
+    captcha = CaptchaField()
+    class Meta:
+        model = Commenti
+        fields = ['nome','email','commento','captcha']   

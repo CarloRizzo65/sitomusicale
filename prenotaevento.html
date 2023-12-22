@@ -19,6 +19,13 @@ section {
     height:50px;
     line-height: 50px;
 }
+p.invalid-feedback {
+    margin:-10px 0 10px 0;
+    padding-left:5px;
+}
+p#errore_captcha {
+    text-align:center;
+}
 </style>   
 {% endblock style %}
 {% block content %}
@@ -41,7 +48,7 @@ section {
                             <li>
                                 <i class="fa fa-envelope"></i>
                                 <h5>Email</h5>
-                                <p>DJ.Music@gmail.com</p>
+                                <p>puppets.eventi@gmail.com</p>
                             </li>
                         </ul>
                     </div>
@@ -52,43 +59,61 @@ section {
                             <h2>Prenota il tuo evento</h2>
                         </div>
                         <p>Riempi i campi obbligatori* e verrai presto contattato</p>
-                        {% if messaggio %}
-                        <div class="valid-feedback">
-                                {{ messaggio }}
-                        </div>
-                        {% endif %}
                         <form method="post" action=/prenotaevento/>
                             {% csrf_token %}
-                            <span style='color:red;'>{{ form.non_field_errors }}</span>
+                            {% if messaggio %}
+                            <p class="text-success">{{ messaggio }}</p>
+                            {% endif %}
+                            {% if prenota_form.non_field_errors %}
+                                {% for error in prenota_form.non_field_errors %}
+                                    <div class="text-danger">{{error}}</div>
+                                {% endfor %}
+                            <br>
+                            {% endif %}
                             <fieldset>
                                 <legend>Dati Personali</legend>
                                 <div class="form-row">
                                     <div class="col-md-6">
                                         <!--<input class="form-control input_elem" type="text" placeholder="Nome">-->
                                         {{ prenota_form.nome_contatto }}
-                                        {% for error in user_form.username.errors  %}
-                                        <br><span style='color:red;'>{{error}}</span>
+                                        {% for error in prenota_form.nome_contatto.errors  %}
+                                        <p class="invalid-feedback  d-block">{{error}}</p>
                                         {% endfor %}
                                     </div>
                                     <div class="col-md-6">
                                         <!--<input class="form-control input_elem" type="text" placeholder="Cognome">-->
                                         {{ prenota_form.cognome_contatto }}
+                                        {% for error in prenota_form.cognome_contatto.errors  %}
+                                        <p class="invalid-feedback  d-block">{{error}}</p>
+                                        {% endfor %}
                                     </div>
                                     <div class="col-md-6">
                                         <!--<input class="form-control input_elem" type="email" placeholder="Email">-->
                                         {{ prenota_form.email_contatto }}
+                                        {% for error in prenota_form.email_contatto.errors  %}
+                                        <p class="invalid-feedback  d-block">{{error}}</p>
+                                        {% endfor %}
                                     </div>
                                     <div class="col-md-6">
                                         <!--<input class="form-control input_elem" type="text" placeholder="Città">-->
                                         {{ prenota_form.citta_contatto }}
+                                        {% for error in prenota_form.citta_contatto.errors  %}
+                                        <p class="invalid-feedback  d-block">{{error}}</p>
+                                        {% endfor %}
                                     </div>
                                     <div class="col-md-6">
                                         <!--<input class="form-control input_elem" type="text" placeholder="Sigla della provincia">-->
                                         {{ prenota_form.provincia_contatto }}
+                                        {% for error in prenota_form.provincia_contatto.errors  %}
+                                        <p class="invalid-feedback  d-block">{{error}}</p>
+                                        {% endfor %}
                                     </div>
                                     <div class="col-md-6">
                                         <!--<input class="form-control input_elem" type="text" placeholder="Cellulare (solo cifre, senza spazi)">-->
                                         {{ prenota_form.cellulare_contatto }}
+                                        {% for error in prenota_form.cellulare_contatto.errors  %}
+                                        <p class="invalid-feedback  d-block">{{error}}</p>
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </fieldset>
@@ -98,22 +123,37 @@ section {
                                     <div class="col-md-12">
                                         <!--<input type="text" class="form-control input_elem" id="tipo_evento" placeholder="Tipo di evento (matrimonio, compleanno,...)">-->
                                         {{ prenota_form.tipo_evento }}
+                                        {% for error in prenota_form.tipo_evento.errors  %}
+                                        <p class="invalid-feedback  d-block">{{error}}</p>
+                                        {% endfor %}
                                     </div>
                                     <div class="col-md-12">
                                         <!--<input type="text" class="form-control input_elem" id="nome_luogo" placeholder="Nome della sala o del luogo privato">-->
                                         {{ prenota_form.luogo_evento }}
+                                        {% for error in prenota_form.luogo_evento.errors  %}
+                                        <p class="invalid-feedback  d-block">{{error}}</p>
+                                        {% endfor %}
                                     </div>
                                     <div class="col-md-6">
                                         <!--<input class="form-control input_elem" id="citta_evento" type="text" placeholder="Città">-->
                                         {{ prenota_form.citta_evento }}
+                                        {% for error in prenota_form.citta_evento.errors  %}
+                                        <p class="invalid-feedback  d-block">{{error}}</p>
+                                        {% endfor %}
                                     </div>
                                     <div class="col-md-6">
                                         <!--<input class="form-control input_elem" id="provincia_evento" type="text" placeholder="Sigla della provincia">-->
                                         {{ prenota_form.provincia_evento }}
+                                        {% for error in prenota_form.provincia_evento.errors  %}
+                                        <p class="invalid-feedback  d-block">{{error}}</p>
+                                        {% endfor %}
                                     </div>
                                     <div class="col-md-12">
                                         <!--<input class="form-control input_elem" id="indirizzo_evento" type="text" placeholder="Via/Piazza e numero civico">-->
                                         {{ prenota_form.indirizzo_evento }}
+                                        {% for error in prenota_form.indirizzo_evento.errors  %}
+                                        <p class="invalid-feedback  d-block">{{error}}</p>
+                                        {% endfor %}
                                     </div>
                                     <div class="form-group col-md-6">
                                         <!--<select id="inputState" id="componenti_evento" class="form-control input_elem">
@@ -122,11 +162,17 @@ section {
                                           </select>-->
                                           <label for="componenti">Partecipanti della band all'evento*</label>
                                           {{ prenota_form.componenti }}
+                                          {% for error in prenota_form.componenti.errors  %}
+                                            <p class="invalid-feedback  d-block">{{error}}</p>
+                                          {% endfor %}
                                     </div>
                                     <div class="form-group col-md-6">
                                         <!--<input class="form-control input_elem" id="data_evento" type="date">-->
                                         <label for="data_evento">Data dell'evento*</label>
                                         {{ prenota_form.data_evento }}
+                                        {% for error in prenota_form.data_evento.errors  %}
+                                        <p class="invalid-feedback  d-block">{{error}}</p>
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </fieldset>
@@ -137,6 +183,11 @@ section {
                                 <div class="col-md-6">
                                     {{ prenota_form.captcha }}
                                 </div>
+                                {% if prenota_form.captcha.errors %}
+                                    {% for error in prenota_form.captcha.errors %}
+                                        <p id="errore_captcha" class="invalid-feedback  d-block"><strong>{{ error|escape }}</strong></p>
+                                    {% endfor %}
+                                {% endif %}
                             </div>
                             <button type="submit" class="site-btn">PRENOTA L'EVENTO</button>
                         </form>

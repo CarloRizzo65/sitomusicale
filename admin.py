@@ -57,11 +57,11 @@ class DatiGruppoAdmin(admin.ModelAdmin):
 
 @admin.register(Commenti)
 class CommentiAdmin(admin.ModelAdmin):
-    list_display = ['__str__','nome','evento','testo','data_modifica']
-    search_fields = ['nome','evento','data_modifica']
-    list_filter = ['nome','evento','data_modifica']
+    list_display = ['__str__','nome','commento','email','data_modifica']
+    search_fields = ['nome','commento','data_modifica']
+    list_filter = ['nome','commento','data_modifica']
     list_display_links = ['__str__']
-    list_editable = ['nome','evento']
+    list_editable = ['nome','commento','email']
 
 @admin.register(LavoraConNoi)
 class LavoraConNoiAdmin(admin.ModelAdmin):

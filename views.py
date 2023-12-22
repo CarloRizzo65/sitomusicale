@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import FotoCarousel,Evento, Componente
-from .forms import PrenotaEventoForm
+from .models import FotoCarousel,Evento, Componente, Commenti, FotoPage
+from .forms import PrenotaEventoForm, CommentiForm
 
 # Create your views here.
 def home(request):
@@ -10,8 +10,18 @@ def home(request):
     return render(request, 'home.html',{'slides':slides,'eventi':eventi})
 
 def fotopage(request):
-    eventi = Evento.objects.all()
-    return render(request, 'fotopage.html', {'eventi':eventi})
+    #foto = FotoPage.objects.all()
+    foto = FotoPage.objects.all().order_by('-data_inserimento')[:9]
+
+    form=CommentiForm(request.POST)
+    if request.method == 'POST':
+        if form.is_valid():
+            commenti=form.save()
+            return redirect('gruppo:foto')
+    else:
+       form =CommentiForm()
+       commenti = (Commenti.objects.all().order_by('-data_inserimento')[:3]).values()
+    return render (request, 'fotopage.html',{'foto':foto,'form':form,'commenti':commenti})
 
 def videopage(request):
     return render(request, 'videopage.html', {})
@@ -35,18 +45,9 @@ def prenotaevento(request):
     if request.method == 'POST':
         prenota_form = PrenotaEventoForm(request.POST)
         if prenota_form.is_valid():
-            #Creo un nuovo oggetto utente ma non lo salvo
-            #new_user = user_form.save(commit=False)
-            #Setto la password
-            #new_user.set_password(user_form.cleaned_data['password']) #Django codifica la password in SHA256
-            #Ora posso salvare in nuovo utente
             prenota_form.save()
             #messages.success(request, "Prenotazione avvenuta con successo")
             messaggio = "Prenotazione avvenuta con successo"
-            #Dopo aver salvato il nuvo utente posso prendere l'id a creare una nuova riga nella tabella profilo con l'id utente appena creato
-            #Profilo.objects.create(user=new_user)
-            #return redirect('prenotaevento', blog.id)
-            #return render(request, 'prenotaevento.html')
             return render(request,'prenotaevento.html', {'prenota_form':PrenotaEventoForm(), 'messaggio':messaggio})
     else:
             prenota_form = PrenotaEventoForm()

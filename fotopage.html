@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titolo %}Foto{% endblock titolo %}
+{% block style %}
+<style>
+    div.discography__item__pic > img {
+    width:360px;
+    height:240px;
+    object-fit: cover;
+}
+</style>   
+{% endblock style %}
+{% block content %}
+<section class="discography spad"> 
+  
+  <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title center-title">
+                        <h2>Foto del Gruppo</h2>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+            {% for foto in foto %}
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="discography__item">
+                        <div class="discography__item__pic">
+                            <img src="{{foto.img.url}}">
+                        </div>
+                    </div>                
+                </div>
+            {% endfor %}    
+            </div>
+    
+
+    <br><br><br><br>
+     
+      
+          <div class="row">            
+                <div class="col-10">
+              {% for commento in commenti %}
+              <div class="alert bg-light mb-3" role="alert">
+                <h4 class="card-title">{{commento.nome}}</h4>
+                <h6 class="card-subtitle mb-2 text-muted">{{commento.email}}</h6>
+                <p class="card-text">{{commento.commento}}.</p>
+              </div>
+              {% endfor %}
+                </div>
+                <div class="col-2">
+                  Saluta la Band!
+                  <form class="form-group" method="POST">
+                      {% csrf_token %}
+                      {{form.as_p}}
+                      <button type="submit" class="btn btn-primary">Invia</button>
+                </div>
+            </div>
+</div>
+
+</section>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+{% endblock content %}
+{% block script %}
+<script>
+$(document).ready(function(){
+
+var array_images = document.querySelectorAll("div.discography__item__pic > img");
+var myVar;
+var contatore = 0;
+function scambia() {
+    let array_random = [];
+    let array_src = [];
+    for (let i=0; i<array_images.length; i++) {
+        let n = Math.floor(Math.random() * array_images.length);
+        while (array_random.includes(n)) {
+            n = Math.floor(Math.random() * array_images.length);
+        }
+        array_random.push(n);
+        array_src.push(array_images[i].src);
+    }
+
+    for (let i=0; i<array_images.length; i++) {//alert(array_random[i]);
+        array_images[i].src = array_src[array_random[i]];
+    }
+}
+function showImage(){
+    if (contatore > 10000) {
+        contatore = 1;
+    }
+    /*if (contatore > 0) {
+        $("div.discography__item__pic > img").fadeIn(1000);
+    }*/
+    else {
+        $("div.discography__item__pic > img").fadeOut(200);
+    }
+
+    scambia();
+    $("div.discography__item__pic > img").fadeIn(200);
+    contatore++;
+    //myVar = setTimeout(showImage, 3000);
+}
+//showImage();
+	//setInterval(  scambiaClienti(); }, 5000);
+    setInterval(showImage, 6000);
+});
+</script>
+{% endblock script %}
