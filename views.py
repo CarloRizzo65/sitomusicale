@@ -16,11 +16,11 @@ def fotopage(request):
     form=CommentiForm(request.POST)
     if request.method == 'POST':
         if form.is_valid():
-            commenti=form.save()
+            form=form.save()
             return redirect('gruppo:foto')
     else:
        form =CommentiForm()
-       commenti = (Commenti.objects.all().order_by('-data_inserimento')[:3]).values()
+    commenti = (Commenti.objects.all().order_by('-data_inserimento')[:3]).values()
     return render (request, 'fotopage.html',{'foto':foto,'form':form,'commenti':commenti})
 
 def videopage(request):
